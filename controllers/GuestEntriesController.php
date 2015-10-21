@@ -1,6 +1,13 @@
 <?php
 namespace Craft;
 
+// REVISIT: This does not work here:
+// use GuestEntriesEvent;
+
+// One initial Craft::import works, for now I opted to
+// add them just before use, as was the case in actionSaveEntry()
+// Craft::import('plugins.guestentries.events.GuestEntriesEvent');
+
 /**
  * Guest Entries controller
  */
@@ -98,6 +105,7 @@ class GuestEntriesController extends BaseController
 	 */
 	private function _returnSuccess($entry)
 	{
+		Craft::import('plugins.guestentries.events.GuestEntriesEvent');
 		$successEvent = new GuestEntriesEvent($this, array('entry' => $entry));
 
 		if (craft()->request->isAjaxRequest())
@@ -155,6 +163,7 @@ class GuestEntriesController extends BaseController
 			));
 		}
 
+		Craft::import('plugins.guestentries.events.GuestEntriesEvent');
 		$errorEvent = new GuestEntriesEvent($this, array('entry' => $entry));
 		craft()->guestEntries->onError($errorEvent);
 	}
